@@ -7,23 +7,28 @@ import { useInterval } from './CustomHooks'
 import beep from './sounds/beep.wav'
 import { playSound, stopSound } from './audioHelper'
 function App() {
-  const BREAK_LENGTH = 1
-  const SESSION_LENGTH = 1
+  // constants
+  const BREAK_LENGTH = 5
+  const SESSION_LENGTH = 25
   const SESSION_TEXT = 'Session'
   const BREAK_TEXT = 'Break'
+  // Hooks
   const [breakLen, setBreakLen] = useState(BREAK_LENGTH)
   const [sessionLen, setSessionLen] = useState(SESSION_LENGTH)
   const [minutes, setMinutes] = useState(sessionLen)
   const [seconds, setSecond] = useState(0)
   const [timerType, setTimerType] = useState(SESSION_TEXT)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
+  // local functions
   const incrementBreakLen = () => {
     if (breakLen < 60) {
       setBreakLen(breakLen + 1)
     }
   }
   const decrementBreakLen = () => {
-    breakLen > 1 ? setBreakLen(breakLen - 1) : setBreakLen(1)
+    if (breakLen > 1) {
+      setBreakLen(breakLen - 1)
+    }
   }
   const incrementSessionLen = () => {
     if (sessionLen < 60) {
@@ -35,17 +40,12 @@ function App() {
     if (sessionLen > 1) {
       setMinutes(sessionLen - 1)
       setSessionLen(sessionLen - 1)
-    } else {
-      setSessionLen(1)
     }
   }
 
   const reset = () => {
     setBreakLen(BREAK_LENGTH)
     setSessionLen(SESSION_LENGTH)
-    // currentTimer === SESSION_TEXT
-    //   ? setMinutes(SESSION_LENGTH)
-    //   : setMinutes(BREAK_LENGTH)
     setSecond(0)
     setIsTimerRunning(false)
     setTimerType(SESSION_TEXT)
@@ -55,9 +55,6 @@ function App() {
 
   const startStop = () => {
     setIsTimerRunning(!isTimerRunning)
-    // currentTimer === SESSION_TEXT
-    //   ? setMinutes(sessionLen)
-    //   : setMinutes(breakLen)
   }
   const tick = () => {
     if (seconds === 0 && minutes === 0) {
@@ -74,16 +71,15 @@ function App() {
       playSound('beep')
     }
     if (seconds === 0) {
-      setSecond(59)
-      console.log(minutes)
       if (minutes > 0) {
         setMinutes(minutes - 1)
       }
+      setSecond(59)
     } else {
       setSecond(seconds - 1)
     }
   }
-  useInterval(tick, isTimerRunning ? 100 : null)
+  useInterval(tick, isTimerRunning ? 1000 : null)
 
   return (
     <div className="container-fluid">
