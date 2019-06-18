@@ -54,6 +54,7 @@ function App() {
   }
 
   const startStop = () => {
+    if (isTimerRunning) stopSound('beep')
     setIsTimerRunning(!isTimerRunning)
   }
   const tick = () => {
