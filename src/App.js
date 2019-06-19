@@ -48,6 +48,7 @@ function App() {
 
   const reset = () => {
     setIsTimerRunning(false)
+    setPaused(false)
     setBreakLen(BREAK_LENGTH)
     setSessionLen(SESSION_LENGTH)
     setTimerType(SESSION_TEXT)
