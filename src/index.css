@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'Black Ops One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Black Ops One Regular'), local('BlackOpsOne-Regular'),
+    url(https://fonts.gstatic.com/s/blackopsone/v10/qWcsB6-ypo7xBdr6Xshe96H3aDvbsg.ttf)
+      format('truetype');
+}
+
+.number {
+  font-family: 'Black Ops One';
+}
+.blink {
+  animation: blinker 1s linear infinite;
+}
+.timer{
+  width: 18em;
+  /* height: 8em; */
+}
+@keyframes blinker {
+  30% {
+    opacity: 0;
+  }
+}

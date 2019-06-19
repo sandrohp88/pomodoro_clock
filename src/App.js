@@ -20,7 +20,7 @@ function App() {
   const [timerType, setTimerType] = useState(SESSION_TEXT)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
   const [timer, setTimer] = useState(sessionLen * 60)
-
+  const [paused, setPaused] = useState(false)
   const incrementBreakLen = () => {
     if (breakLen < 60) {
       setBreakLen(breakLen + 1)
@@ -58,8 +58,8 @@ function App() {
   const startStop = () => {
     if (isTimerRunning) {
       stopSound('beep')
-      // setTimer(sessionLen * 60)
-    }
+      setPaused(true)
+    } else setPaused(false)
     setIsTimerRunning(!isTimerRunning)
   }
   const tick = () => {
@@ -73,6 +73,8 @@ function App() {
         setTimer(sessionLen * 60)
         setTimerType(SESSION_TEXT)
       }
+    }
+    if (timer < 10) {
       playSound('beep')
     }
   }
@@ -86,20 +88,41 @@ function App() {
   useInterval(tick, isTimerRunning ? 1000 : null)
 
   return (
-    <div className="container-fluid">
-      <h1>Pomodoro Clock</h1>
-      <BreakLength
-        len={breakLen}
-        increment={incrementBreakLen}
-        decrement={decrementBreakLen}
-      />
-      <SessionLabel
-        len={sessionLen}
-        increment={incrementSessionLen}
-        decrement={decrementSessionLen}
-      />
-      <Timer time={parseTime()} text={timerType} />
-      <TimerControls reset={reset} startStop={startStop} />
+    <div className="container-fluid  bg-dark text-light">
+      <div className="row justify-content-center">
+        <p className="col-sm-auto text-center h1 font-weight-bold m-2 p-2">
+          Pomodoro Clock
+        </p>
+      </div>
+      <div className="row justify-content-center align-items-end">
+        <div className="col-sm-auto">
+          <BreakLength
+            len={breakLen}
+            increment={incrementBreakLen}
+            decrement={decrementBreakLen}
+          />
+        </div>
+        <div className="col-sm-auto">
+          <Timer time={parseTime()} text={timerType} paused={paused} />
+        </div>
+        <div className="col-sm-auto">
+          <SessionLabel
+            len={sessionLen}
+            increment={incrementSessionLen}
+            decrement={decrementSessionLen}
+          />
+        </div>
+      </div>
+      <div className="row justify-content-center" />
+      <div className="row justify-content-center p-2">
+        <div className="col-sm-auto">
+          <TimerControls
+            reset={reset}
+            startStop={startStop}
+            isRunning={isTimerRunning}
+          />
+        </div>
+      </div>
       <audio id="beep" src={beep} />
     </div>
   )
